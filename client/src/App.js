@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -33,15 +34,17 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="todo-container">
       <h1>To-Do App</h1>
+      <div className='add-task-container'>
       <input
         type="text"
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
         placeholder="Add a new task"
       />
-      <button onClick={addTask}>Add</button>
+      <button onClick={addTask} className='add-button'>Add</button>
+      </div>
       <ul>
         {tasks.map(task => (
           <li key={task._id}>
@@ -53,7 +56,7 @@ const App = () => {
             <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
               {task.task}
             </span>
-            <button onClick={() => deleteTask(task._id)}>Delete</button>
+            <button onClick={() => deleteTask(task._id)} className='delete-button'>Delete</button>
           </li>
         ))}
       </ul>
