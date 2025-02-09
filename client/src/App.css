@@ -1,50 +1,84 @@
+:root {
+  --bg-color: #f4f4f4;
+  --text-color: #333;
+  --border-color: #ccc;
+  --button-green: #218838;
+  --button-orange: #ff9800;
+  --button-red: #c82333;
+  --button-hover-green: #1e7e34;
+  --button-hover-orange: #e68900;
+  --button-hover-red: #a71d2a;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
+  background-color: var(--bg-color);
   margin: 0;
   padding: 0;
 }
 
 .todo-container {
+  max-width: 800px;
+  margin: 20px auto;
   padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
-  color: #333;
+  color: var(--text-color);
 }
 
-.add-task-container {
+.add-task {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: 10px;
 }
 
-input[type="text"] {
-  width: 95%;
+input {
+  flex: 1;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  margin-bottom: 10px;
+  outline: none;
 }
 
-.add-button {
-  padding: 10px 25px;
+input:focus {
+  box-shadow: none;
+}
+
+button {
+  padding: 10px 15px;
   border: none;
-  background-color: #28a745;
   color: white;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 10px;
+  transition: background-color 0.3s;
+  min-width: 120px;
+}
+
+.add-button {
+  background-color: var(--button-green);
+}
+
+.complete-button {
+  background-color: var(--button-orange);
+}
+
+.delete-button {
+  background-color: var(--button-red);
 }
 
 button:hover {
-  background-color: #218838;
+  filter: brightness(90%);
 }
 
 ul {
   list-style-type: none;
   padding: 0;
+  margin-top: 20px;
 }
 
 li {
@@ -52,27 +86,19 @@ li {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
 }
 
 li:last-child {
   border-bottom: none;
 }
 
-.completed {
+.task-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.completed-task {
   text-decoration: line-through;
   color: #888;
-}
-
-.delete-button {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
 }
