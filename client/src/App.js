@@ -1,66 +1,101 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaTrash } from "react-icons/fa";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { ClipLoader } from "react-spinners";
+import { debounce } from "lodash";
+import useApi from "./hooks/useApi";
+import TaskList from "./components/TaskList";
 import "./App.css";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
+  const { callApi, loading, error } = useApi();
+
+  // Fetch tasks (memoized to prevent unnecessary re-renders)
+  const fetchTasks = useCallback(async () => {
+    try {
+      const data = await callApi({
+        method: "get",
+        url: `${process.env.REACT_APP_BACKEND_URL}/tasks`,
+      });
+      setTasks(data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  }, [callApi]);
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/tasks");
-        setTasks(data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
-
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
-  const addTask = async () => {
+  // Add task
+  const addTask = useCallback(async () => {
     if (!newTask.trim()) return;
 
     try {
-      const { data } = await axios.post("http://localhost:5000/tasks", {
-        task: newTask,
+      const data = await callApi({
+        method: "post",
+        url: `${process.env.REACT_APP_BACKEND_URL}/tasks`,
+        data: { task: newTask },
       });
       setTasks((prev) => [...prev, data]);
       setNewTask("");
     } catch (error) {
       console.error("Error adding task:", error);
     }
-  };
+  }, [newTask, callApi]);
 
-  const deleteTask = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/tasks/${id}`);
-      setTasks((prev) => prev.filter((task) => task._id !== id));
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
+  // Debounced version of addTask for better UX
+  const debouncedAddTask = useMemo(() => debounce(addTask, 300), [addTask]);
 
-  const markAsComplete = async (id) => {
-    try {
-      const { data } = await axios.patch(`http://localhost:5000/tasks/${id}`, {
-        completed: true,
-      });
-      setTasks((prev) => prev.map((task) => (task._id === id ? data : task)));
-    } catch (error) {
-      console.error("Error marking task as complete:", error);
-    }
-  };
+  // Delete task
+  const deleteTask = useCallback(
+    async (id) => {
+      try {
+        await callApi({
+          method: "delete",
+          url: `${process.env.REACT_APP_BACKEND_URL}/tasks/${id}`,
+        });
+        setTasks((prev) => prev.filter((task) => task._id !== id));
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
+    },
+    [callApi]
+  );
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") addTask();
-  };
+  // Mark task as complete
+  const markAsComplete = useCallback(
+    async (id) => {
+      try {
+        const data = await callApi({
+          method: "patch",
+          url: `${process.env.REACT_APP_BACKEND_URL}/tasks/${id}`,
+          data: { completed: true },
+        });
+        setTasks((prev) => prev.map((task) => (task._id === id ? data : task)));
+      } catch (error) {
+        console.error("Error marking task as complete:", error);
+      }
+    },
+    [callApi]
+  );
+
+  // Handle Enter key press
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === "Enter") debouncedAddTask();
+    },
+    [debouncedAddTask]
+  );
 
   return (
     <div className="todo-container">
       <h1>To-Do App</h1>
+
+      {loading && <ClipLoader color="#28a745" size={30} />}
+      {error && <p className="error">{error}</p>}
+
       <div className="add-task">
         <input
           type="text"
@@ -73,26 +108,12 @@ const App = () => {
           Add
         </button>
       </div>
-      <ul>
-        {tasks.map(({ _id, task, completed }) => (
-          <li key={_id}>
-            <span className={completed ? "completed-task" : ""}>{task}</span>
-            <div className="task-actions">
-              {!completed && (
-                <button
-                  onClick={() => markAsComplete(_id)}
-                  className="complete-button"
-                >
-                  Mark as Completed
-                </button>
-              )}
-              <button onClick={() => deleteTask(_id)} className="delete-button">
-                <FaTrash />
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+
+      <TaskList
+        tasks={tasks}
+        markAsComplete={markAsComplete}
+        deleteTask={deleteTask}
+      />
     </div>
   );
 };
