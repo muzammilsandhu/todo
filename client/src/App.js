@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ClipLoader } from "react-spinners";
 import { debounce } from "lodash";
+import { AnimatePresence } from "framer-motion";
 import useApi from "./hooks/useApi";
 import TaskList from "./components/TaskList";
 import "./App.css";
@@ -109,11 +110,13 @@ const App = () => {
         </button>
       </div>
 
-      <TaskList
-        tasks={tasks}
-        markAsComplete={markAsComplete}
-        deleteTask={deleteTask}
-      />
+      <AnimatePresence>
+        <TaskList
+          tasks={tasks}
+          markAsComplete={markAsComplete}
+          deleteTask={deleteTask}
+        />
+      </AnimatePresence>
     </div>
   );
 };
