@@ -84,10 +84,7 @@ const App = () => {
 
   // Clear all tasks
   const clearAllTasks = useCallback(async () => {
-    const confirmClear = window.confirm(
-      "Are you sure you want to clear all tasks?"
-    );
-    if (!confirmClear) return;
+    if (!window.confirm("Are you sure you want to clear all tasks?")) return;
 
     try {
       await callApi({
