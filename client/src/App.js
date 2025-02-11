@@ -82,6 +82,24 @@ const App = () => {
     [callApi]
   );
 
+  // Clear all tasks
+  const clearAllTasks = useCallback(async () => {
+    const confirmClear = window.confirm(
+      "Are you sure you want to clear all tasks?"
+    );
+    if (!confirmClear) return;
+
+    try {
+      await callApi({
+        method: "delete",
+        url: `${process.env.REACT_APP_BACKEND_URL}/tasks`,
+      });
+      setTasks([]);
+    } catch (error) {
+      console.error("Error clearing tasks:", error);
+    }
+  }, [callApi]);
+
   // Handle Enter key press
   const handleKeyPress = useCallback(
     (e) => {
@@ -105,9 +123,14 @@ const App = () => {
           placeholder="Add a new task"
           onKeyDown={handleKeyPress}
         />
-        <button onClick={addTask} className="add-button">
-          Add
-        </button>
+        <div className="task-buttons">
+          <button onClick={addTask} className="add-button">
+            Add
+          </button>
+          <button onClick={clearAllTasks} className="clear-button">
+            Clear All
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

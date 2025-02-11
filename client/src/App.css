@@ -5,14 +5,15 @@
   --button-green: #218838;
   --button-orange: #ff9800;
   --button-red: #c82333;
-  --button-hover-green: #1e7e34;
-  --button-hover-orange: #e68900;
-  --button-hover-red: #a71d2a;
+  --button-hover: brightness(90%);
+  --button-padding: 10px 15px;
+  --border-radius: 4px;
+  --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--bg-color);
+  background: var(--bg-color);
   margin: 0;
   padding: 0;
 }
@@ -22,8 +23,8 @@ body {
   margin: 20px auto;
   padding: 20px;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 h1 {
@@ -31,17 +32,28 @@ h1 {
   color: var(--text-color);
 }
 
-.add-task {
+/* Form and Input Styling */
+.add-task,
+.task-buttons,
+.task-actions {
   display: flex;
   align-items: center;
+}
+
+.add-task {
   gap: 10px;
+}
+
+.task-buttons,
+.task-actions {
+  gap: 5px;
 }
 
 input {
   flex: 1;
   padding: 10px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   outline: none;
 }
 
@@ -49,34 +61,37 @@ input:focus {
   box-shadow: none;
 }
 
+/* Buttons */
 button {
-  padding: 10px 15px;
+  padding: var(--button-padding);
   border: none;
   color: white;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, filter 0.2s;
   min-width: 120px;
 }
 
+button:hover {
+  filter: var(--button-hover);
+}
+
 .add-button {
-  background-color: var(--button-green);
+  background: var(--button-green);
+}
+
+.clear-button,
+.delete-button {
+  background: var(--button-red);
 }
 
 .complete-button {
-  background-color: var(--button-orange);
+  background: var(--button-orange);
 }
 
-.delete-button {
-  background-color: var(--button-red);
-}
-
-button:hover {
-  filter: brightness(90%);
-}
-
+/* Task List */
 ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin-top: 20px;
 }
@@ -93,16 +108,12 @@ li:last-child {
   border-bottom: none;
 }
 
-.task-actions {
-  display: flex;
-  gap: 5px;
-}
-
 .completed-task {
   text-decoration: line-through;
   color: #888;
 }
 
+/* Error Message */
 .error {
   text-align: center;
   color: #dc3545;
