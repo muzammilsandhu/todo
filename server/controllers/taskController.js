@@ -3,17 +3,21 @@ const asyncHandler = require("../utils/asyncHandler");
 
 // Get all tasks
 const getAllTasks = asyncHandler(async (req, res) => {
-  const tasks = await Task.find();
+  const tasks = await Task.find().lean(); // Use `.lean()` to improve performance
   res.status(200).json(tasks);
 });
 
 // Add a new task
+// Add a new task
 const addTask = asyncHandler(async (req, res) => {
   const { task } = req.body;
 
-  const newTask = new Task({ task });
-  const savedTask = await newTask.save();
-  res.status(201).json(savedTask);
+  if (!task?.trim()) {
+    return res.status(400).json({ message: "Task cannot be empty" });
+  }
+
+  const newTask = await Task.create({ task }); // Directly use `.create()`
+  res.status(201).json(newTask);
 });
 
 // Delete a task by ID

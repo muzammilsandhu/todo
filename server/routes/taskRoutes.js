@@ -7,13 +7,17 @@ const {
   updateTask,
 } = require("../controllers/taskController");
 
+const { validateObjectId } = require("../middleware/validateObjectId"); // Add ID validation middleware
+
 const router = express.Router();
 
-// Routes
-router.get("/", getAllTasks);
-router.post("/", addTask);
-router.delete("/:id", deleteTask);
-router.delete("/", deleteAllTasks);
-router.patch("/:id", updateTask);
+// Routes for individual tasks (require task ID)
+router
+  .route("/:id")
+  .patch(validateObjectId, updateTask) // PATCH or PUT based on needs
+  .delete(validateObjectId, deleteTask);
+
+// Routes for bulk operations (all tasks)
+router.route("/").get(getAllTasks).post(addTask).delete(deleteAllTasks);
 
 module.exports = router;

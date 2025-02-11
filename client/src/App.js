@@ -122,13 +122,14 @@ const App = () => {
           onKeyDown={handleKeyPress}
         />
         <div className="task-buttons">
-          <button onClick={addTask} className="add-button">
+          <button onClick={addTask} className="add-button" title="Add Task">
             <FaPlus />
           </button>
           <button
             onClick={clearAllTasks}
             disabled={tasks.length === 0}
             className="clear-button"
+            title="Clear All Tasks"
           >
             <FaTimes />
           </button>
