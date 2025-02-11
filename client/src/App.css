@@ -6,7 +6,7 @@
   --button-orange: #ff9800;
   --button-red: #c82333;
   --button-hover: brightness(90%);
-  --button-padding: 10px 15px;
+  --button-padding: 8px;
   --border-radius: 4px;
   --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -58,7 +58,9 @@ input {
 }
 
 input:focus {
-  box-shadow: none;
+  /* box-shadow: none; */
+  border-color: var(--button-green);
+  box-shadow: 0 0 5px rgba(33, 136, 56, 0.3);
 }
 
 /* Buttons */
@@ -69,11 +71,15 @@ button {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s, filter 0.2s;
-  min-width: 120px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
-  filter: var(--button-hover);
+  transform: scale(1.05);
 }
 
 .add-button {

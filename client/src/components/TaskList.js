@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaCheck } from "react-icons/fa";
 
 const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
   return (
@@ -19,7 +19,7 @@ const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
                 onClick={() => markAsComplete(_id)}
                 className="complete-button"
               >
-                Mark as Completed
+                <FaCheck />
               </button>
             )}
             <button onClick={() => deleteTask(_id)} className="delete-button">

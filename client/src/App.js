@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ClipLoader } from "react-spinners";
 import { debounce } from "lodash";
 import { AnimatePresence } from "framer-motion";
+import { FaPlus, FaTimes } from "react-icons/fa";
 import useApi from "./hooks/useApi";
 import TaskList from "./components/TaskList";
 import "./App.css";
@@ -122,14 +123,14 @@ const App = () => {
         />
         <div className="task-buttons">
           <button onClick={addTask} className="add-button">
-            Add
+            <FaPlus />
           </button>
           <button
             onClick={clearAllTasks}
             disabled={tasks.length === 0}
             className="clear-button"
           >
-            Clear All
+            <FaTimes />
           </button>
         </div>
       </div>
