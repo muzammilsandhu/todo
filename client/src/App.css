@@ -89,6 +89,11 @@ button:hover {
   background: var(--button-orange);
 }
 
+.clear-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
 /* Task List */
 ul {
   list-style: none;

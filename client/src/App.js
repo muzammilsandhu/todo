@@ -124,7 +124,11 @@ const App = () => {
           <button onClick={addTask} className="add-button">
             Add
           </button>
-          <button onClick={clearAllTasks} className="clear-button">
+          <button
+            onClick={clearAllTasks}
+            disabled={tasks.length === 0}
+            className="clear-button"
+          >
             Clear All
           </button>
         </div>
