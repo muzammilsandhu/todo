@@ -1,10 +1,10 @@
 :root {
   --bg-color: #f4f4f4;
-  --text-color: #333;
+  --text-color: #fffff9;
   --border-color: #ccc;
-  --button-green: #218838;
-  --button-orange: #ff9800;
-  --button-red: #c82333;
+  --color-green: #218838;
+  --color-orange: #ff9800;
+  --color-red: #c82333;
   --button-hover: brightness(90%);
   --button-padding: 8px;
   --border-radius: 4px;
@@ -22,14 +22,14 @@ body {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background: white;
+  background: var(--text-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
 }
 
 h1 {
   text-align: center;
-  color: var(--text-color);
+  color: #333;
 }
 
 /* Form and Input Styling */
@@ -59,7 +59,7 @@ input {
 
 input:focus {
   /* box-shadow: none; */
-  border-color: var(--button-green);
+  border-color: var(--color-green);
   box-shadow: 0 0 5px rgba(33, 136, 56, 0.3);
 }
 
@@ -67,7 +67,7 @@ input:focus {
 button {
   padding: var(--button-padding);
   border: none;
-  color: white;
+  color: var(--text-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.3s, filter 0.2s;
@@ -83,16 +83,16 @@ button:hover {
 }
 
 .add-button {
-  background: var(--button-green);
+  background: var(--color-green);
 }
 
 .clear-button,
 .delete-button {
-  background: var(--button-red);
+  background: var(--color-red);
 }
 
 .complete-button {
-  background: var(--button-orange);
+  background: var(--color-green);
 }
 
 .clear-button:disabled {
@@ -129,4 +129,54 @@ li:last-child {
   text-align: center;
   color: #dc3545;
   font-weight: bold;
+}
+
+/* Priorities */
+.priority-select {
+  appearance: none;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  height: 40px;
+}
+
+.priority-select option {
+  color: var(--text-color);
+}
+
+.priority-select option[value="High"] {
+  background-color: var(--color-red);
+}
+
+.priority-select option[value="Medium"] {
+  background-color: var(--color-orange);
+}
+
+.priority-select option[value="Low"] {
+  background-color: var(--color-green);
+}
+
+.priority {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--text-color);
+  padding: var(--button-padding);
+  border-radius: var(--border-radius);
+  margin-left: 10px;
+}
+
+.priority-high {
+  background-color: var(--color-red);
+}
+
+.priority-medium {
+  background-color: var(--color-orange);
+}
+
+.priority-low {
+  background-color: var(--color-green);
 }

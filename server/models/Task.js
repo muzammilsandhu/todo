@@ -12,6 +12,11 @@ const TaskSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
+    },
   },
   { timestamps: true } // Automatically adds createdAt & updatedAt
 );

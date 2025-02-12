@@ -1,28 +1,26 @@
 import React, { useMemo } from "react";
-import { motion } from "framer-motion";
 import { FaTrash, FaCheck } from "react-icons/fa";
 
-const taskVariants = {
-  initial: { opacity: 0, y: -10 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
+const taskPriorityColor = {
+  High: "red",
+  Medium: "orange",
+  Low: "green",
 };
 
 const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
   const renderedTasks = useMemo(
     () =>
-      tasks.map(({ _id, task, completed }) => (
-        <motion.li
+      tasks.map(({ _id, task, completed, priority }) => (
+        <li
           key={_id}
-          variants={taskVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-          style={{ cursor: "pointer" }}
+          style={{ borderLeft: `5px solid ${taskPriorityColor[priority]}` }}
         >
-          <span className={completed ? "completed-task" : ""}>{task}</span>
+          <div className="task-content">
+            <span className={completed ? "completed-task" : ""}>{task}</span>
+            <span className={`priority priority-${priority.toLowerCase()}`}>
+              {priority}
+            </span>
+          </div>
           <div className="task-actions">
             {!completed && (
               <button
@@ -43,7 +41,7 @@ const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
               <FaTrash />
             </button>
           </div>
-        </motion.li>
+        </li>
       )),
     [tasks, markAsComplete, deleteTask]
   );
