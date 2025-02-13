@@ -24,6 +24,8 @@ const App = () => {
     []
   );
 
+  const MAX_TASK_LENGTH = 30;
+
   // Fetch tasks
   useEffect(() => {
     (async () => {
@@ -42,6 +44,11 @@ const App = () => {
   // Add task
   const addTask = useCallback(async () => {
     if (!newTask.trim()) return;
+
+    if (newTask.length > MAX_TASK_LENGTH) {
+      alert(`Task should not exceed ${MAX_TASK_LENGTH} characters.`);
+      return;
+    }
 
     try {
       const data = await callApi({
@@ -135,26 +142,35 @@ const App = () => {
       {error && <p className="error">{error}</p>}
 
       <div className="add-task">
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Add a new task"
-          onKeyDown={handleKeyPress} // Handle Enter, ArrowUp, ArrowDown
-        />
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          className="priority-select"
-          style={{ backgroundColor: priorityColors[priority] }}
-        >
-          {priorityLevels.map((level) => (
-            <option key={level} value={level}>
-              {level}
-            </option>
-          ))}
-        </select>
+        <div className="input-container">
+          <input
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Add a new task"
+            onKeyDown={handleKeyPress} // Handle Enter, ArrowUp, ArrowDown
+          />
+          <p
+            className={`char-counter ${
+              newTask.length > MAX_TASK_LENGTH ? "error" : ""
+            }`}
+          >
+            {newTask.length}/{MAX_TASK_LENGTH}
+          </p>
+        </div>
         <div className="task-buttons">
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="priority-select"
+            style={{ backgroundColor: priorityColors[priority] }}
+          >
+            {priorityLevels.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
           <button onClick={addTask} className="add-button" title="Add Task">
             <FaPlus />
           </button>
