@@ -10,6 +10,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [priority, setPriority] = useState("Medium");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { callApi, loading, error } = useApi();
 
@@ -24,7 +25,7 @@ const App = () => {
     []
   );
 
-  const MAX_TASK_LENGTH = 30;
+  const MAX_TASK_LENGTH = 250;
 
   // Fetch tasks
   useEffect(() => {
@@ -43,10 +44,13 @@ const App = () => {
 
   // Add task
   const addTask = useCallback(async () => {
-    if (!newTask.trim()) return;
+    if (!newTask.trim()) {
+      setErrorMessage("Task cannot be empty.");
+      return;
+    }
 
     if (newTask.length > MAX_TASK_LENGTH) {
-      alert(`Task should not exceed ${MAX_TASK_LENGTH} characters.`);
+      setErrorMessage(`Task should not exceed ${MAX_TASK_LENGTH} characters.`);
       return;
     }
 
@@ -59,6 +63,7 @@ const App = () => {
       setTasks((prev) => [...prev, data]);
       setNewTask("");
       setPriority("Medium");
+      setErrorMessage(""); // Clear error on success
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -80,17 +85,37 @@ const App = () => {
     }
   };
 
-  // Mark task as complete
-  const markAsComplete = async (id) => {
+  // Toggle mark as complete/incomplete
+  const markAsComplete = async (id, completed) => {
     try {
-      const data = await callApi({
+      const updatedTask = await callApi({
         method: "patch",
         url: `${process.env.REACT_APP_BACKEND_URL}/tasks/${id}`,
-        data: { completed: true },
+        data: { completed: !completed }, // Toggle the completed state
       });
-      setTasks((prev) => prev.map((task) => (task._id === id ? data : task)));
+
+      setTasks((prev) =>
+        prev.map((task) => (task._id === id ? updatedTask : task))
+      );
     } catch (error) {
-      console.error("Error marking task as complete:", error);
+      console.error("Error updating task status:", error);
+    }
+  };
+
+  // Revert task to incomplete
+  const revertTask = async (id) => {
+    try {
+      const updatedTask = await callApi({
+        method: "patch",
+        url: `${process.env.REACT_APP_BACKEND_URL}/tasks/${id}`,
+        data: { completed: false }, // Set back to incomplete
+      });
+
+      setTasks((prev) =>
+        prev.map((task) => (task._id === id ? updatedTask : task))
+      );
+    } catch (error) {
+      console.error("Error reverting task:", error);
     }
   };
 
@@ -117,16 +142,12 @@ const App = () => {
       // Increase priority
       setPriority((prevPriority) => {
         const index = priorityLevels.indexOf(prevPriority);
-        // return index < priorityLevels.length - 1
-        //   ? priorityLevels[index + 1]
-        //   : prevPriority;
         return priorityLevels[(index + 1) % priorityLevels.length]; // Loop forward
       });
     } else if (e.key === "ArrowDown") {
       // Decrease priority
       setPriority((prevPriority) => {
         const index = priorityLevels.indexOf(prevPriority);
-        // return index > 0 ? priorityLevels[index - 1] : prevPriority;
         return priorityLevels[
           (index - 1 + priorityLevels.length) % priorityLevels.length
         ]; // Loop backward
@@ -134,21 +155,28 @@ const App = () => {
     }
   };
 
+  // Clear error when user starts typing
+  const handleInputChange = (e) => {
+    setNewTask(e.target.value);
+    if (errorMessage) setErrorMessage(""); // Clear error if user types
+  };
+
   return (
     <div className="todo-container">
       <h1>To-Do App</h1>
 
       {loading && <ClipLoader color="#28a745" size={30} />}
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
 
       <div className="add-task">
         <div className="input-container">
           <input
             type="text"
             value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
+            onChange={handleInputChange}
             placeholder="Add a new task"
             onKeyDown={handleKeyPress} // Handle Enter, ArrowUp, ArrowDown
+            className={errorMessage ? "error-input" : ""}
           />
           <p
             className={`char-counter ${
@@ -185,9 +213,12 @@ const App = () => {
         </div>
       </div>
 
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+
       <TaskList
         tasks={tasks}
         markAsComplete={markAsComplete}
+        revertTask={revertTask}
         deleteTask={deleteTask}
       />
     </div>

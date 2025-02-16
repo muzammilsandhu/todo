@@ -33,13 +33,14 @@ h1 {
   color: #333;
 }
 
-/* Form and Input Styling */
+/* Input Container */
 .input-container {
   display: flex;
   gap: 10px;
   flex-grow: 1;
 }
 
+/* Flex Utility Classes */
 .add-task,
 .task-buttons,
 .task-actions {
@@ -57,6 +58,7 @@ h1 {
   gap: 5px;
 }
 
+/* Input Styling */
 input {
   padding: 10px;
   border: 1px solid var(--border-color);
@@ -66,12 +68,11 @@ input {
 }
 
 input:focus {
-  /* box-shadow: none; */
   border-color: var(--color-green);
   box-shadow: 0 0 5px rgba(33, 136, 56, 0.3);
 }
 
-/* Buttons */
+/* Button Styling */
 button {
   padding: var(--button-padding);
   border: none;
@@ -90,7 +91,8 @@ button:hover {
   transform: scale(1.05);
 }
 
-.add-button {
+.add-button,
+.complete-button {
   background: var(--color-green);
 }
 
@@ -99,13 +101,13 @@ button:hover {
   background: var(--color-red);
 }
 
-.complete-button {
-  background: var(--color-green);
-}
-
 .clear-button:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
+}
+
+.revert-button {
+  background-color: var(--color-orange); /* Orange */
 }
 
 /* Task List */
@@ -129,17 +131,23 @@ li:last-child {
 
 .completed-task {
   text-decoration: line-through;
-  color: #888;
+  opacity: 0.6;
 }
 
 /* Error Message */
-.error {
-  text-align: center;
+.error-message {
   color: var(--color-red);
+  font-size: 14px;
+  margin-top: 5px;
   font-weight: bold;
 }
 
-/* Priorities */
+.error-input {
+  border: 2px solid var(--color-red) !important; /* Red border */
+  box-shadow: none !important;
+}
+
+/* Priority Dropdown */
 .priority-select {
   appearance: none;
   padding: 8px 12px;
@@ -168,6 +176,7 @@ li:last-child {
   background-color: var(--color-green);
 }
 
+/* Priority Labels */
 .priority {
   font-size: 12px;
   font-weight: bold;
@@ -199,6 +208,7 @@ li:last-child {
   color: var(--color-red);
 }
 
+/* Responsive Design */
 @media (max-width: 480px) {
   .add-task {
     flex-direction: column;

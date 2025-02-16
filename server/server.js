@@ -16,7 +16,7 @@ app.use(express.json());
 
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 5000 })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => {
     console.error("MongoDB connection error:", err);
@@ -34,7 +34,9 @@ app.get("/", (req, res) => {
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Error:", err);
-  res.status(500).json({ message: "Internal Server Error" });
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
 });
 
 // Start Server
@@ -46,4 +48,10 @@ app.listen(PORT, () => {
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled Promise Rejection:", err);
   process.exit(1);
+});
+
+// Shutdown Handling
+process.on("SIGINT", () => {
+  console.log("Server shutting down...");
+  process.exit(0);
 });

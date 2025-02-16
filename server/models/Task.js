@@ -6,7 +6,7 @@ const TaskSchema = new mongoose.Schema(
       type: String,
       required: [true, "Task description is required"],
       trim: true, // Removes extra spaces
-      maxlength: [200, "Task description cannot exceed 200 characters"],
+      maxlength: [250, "Task description cannot exceed 200 characters"],
     },
     completed: {
       type: Boolean,
@@ -22,6 +22,6 @@ const TaskSchema = new mongoose.Schema(
 );
 
 // Add index for faster queries
-TaskSchema.index({ completed: 1 });
+TaskSchema.index({ completed: 1, priority: 1 });
 
 module.exports = mongoose.model("Task", TaskSchema);

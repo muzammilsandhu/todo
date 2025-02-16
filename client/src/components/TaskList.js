@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { FaTrash, FaCheck } from "react-icons/fa";
+import { FaTrash, FaCheck, FaUndo } from "react-icons/fa";
 
 const taskPriorityColor = {
   High: "red",
@@ -7,7 +7,7 @@ const taskPriorityColor = {
   Low: "green",
 };
 
-const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
+const TaskList = ({ tasks, markAsComplete, revertTask, deleteTask }) => {
   const renderedTasks = useMemo(
     () =>
       tasks.map(({ _id, task, completed, priority }) => (
@@ -22,7 +22,18 @@ const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
             </span>
           </div>
           <div className="task-actions">
-            {!completed && (
+            {completed ? (
+              // Show Revert Button when completed
+              <button
+                onClick={() => revertTask(_id)}
+                className="revert-button"
+                title="Revert Task"
+                aria-label="Revert task"
+              >
+                <FaUndo />
+              </button>
+            ) : (
+              // Show Mark as Complete Button when not completed
               <button
                 onClick={() => markAsComplete(_id)}
                 className="complete-button"
@@ -43,7 +54,7 @@ const TaskList = ({ tasks, markAsComplete, deleteTask }) => {
           </div>
         </li>
       )),
-    [tasks, markAsComplete, deleteTask]
+    [tasks, markAsComplete, revertTask, deleteTask]
   );
 
   return <ul>{renderedTasks}</ul>;
