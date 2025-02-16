@@ -123,6 +123,8 @@ li {
   align-items: center;
   padding: 10px 0 10px 10px;
   border-bottom: 1px solid var(--border-color);
+  line-height: 2;
+  gap: 10px;
 }
 
 li:last-child {
@@ -209,6 +211,12 @@ li:last-child {
 }
 
 /* Responsive Design */
+@media (max-width: 800px) {
+  .todo-container {
+    margin: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .add-task {
     flex-direction: column;
@@ -217,7 +225,15 @@ li:last-child {
 
   li {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     align-items: initial;
+  }
+
+  button {
+    padding: 6px;
+  }
+
+  .priority-select {
+    padding: 6px 8px;
   }
 }
