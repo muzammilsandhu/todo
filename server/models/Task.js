@@ -17,11 +17,15 @@ const TaskSchema = new mongoose.Schema(
       enum: ["Low", "Medium", "High"],
       default: "Medium",
     },
+    starred: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true } // Automatically adds createdAt & updatedAt
 );
 
 // Add index for faster queries
-TaskSchema.index({ completed: 1, priority: 1 });
+TaskSchema.index({ completed: 1, priority: 1, starred: 1 });
 
 module.exports = mongoose.model("Task", TaskSchema);

@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { FaTrash, FaCheck, FaUndo } from "react-icons/fa";
+import { FaTrash, FaCheck, FaUndo, FaStar, FaRegStar } from "react-icons/fa";
+import "../App.css";
 
 const taskPriorityColor = {
   High: "red",
@@ -7,13 +8,20 @@ const taskPriorityColor = {
   Low: "green",
 };
 
-const TaskList = ({ tasks, markAsComplete, revertTask, deleteTask }) => {
+const TaskList = ({
+  tasks,
+  markAsComplete,
+  revertTask,
+  deleteTask,
+  toggleStarred,
+}) => {
   const renderedTasks = useMemo(
     () =>
-      tasks.map(({ _id, task, completed, priority }) => (
+      tasks.map(({ _id, task, completed, priority, starred }) => (
         <li
           key={_id}
           style={{ borderLeft: `5px solid ${taskPriorityColor[priority]}` }}
+          className="gap-10"
         >
           <div className="task-content">
             <span className={completed ? "completed-task" : ""}>{task}</span>
@@ -21,7 +29,15 @@ const TaskList = ({ tasks, markAsComplete, revertTask, deleteTask }) => {
               {priority}
             </span>
           </div>
-          <div className="task-actions">
+          <div className="task-actions flex gap-5">
+            <button
+              onClick={() => toggleStarred(_id, starred)}
+              className="star-button"
+              title={starred ? "Unstar Task" : "Star Task"}
+              aria-label={starred ? "Unstar Task" : "Star Task"}
+            >
+              {starred ? <FaStar color="gold" /> : <FaRegStar />}
+            </button>
             {completed ? (
               // Show Revert Button when completed
               <button
@@ -54,7 +70,7 @@ const TaskList = ({ tasks, markAsComplete, revertTask, deleteTask }) => {
           </div>
         </li>
       )),
-    [tasks, markAsComplete, revertTask, deleteTask]
+    [tasks, markAsComplete, revertTask, deleteTask, toggleStarred]
   );
 
   return <ul>{renderedTasks}</ul>;

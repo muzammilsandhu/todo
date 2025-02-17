@@ -36,11 +36,11 @@ const deleteAllTasks = asyncHandler(async (req, res) => {
 
 // Update a task (mark as complete)
 const updateTask = asyncHandler(async (req, res) => {
-  const { completed, priority } = req.body;
+  const { completed, priority, starred } = req.body;
 
   const updatedTask = await Task.findByIdAndUpdate(
     req.params.id,
-    { completed, priority },
+    { completed, priority, starred },
     { new: true }
   );
 

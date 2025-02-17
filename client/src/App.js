@@ -134,6 +134,23 @@ const App = () => {
     }
   };
 
+  // Toggle starred
+  const toggleStarred = async (id, starred) => {
+    try {
+      const updatedTask = await callApi({
+        method: "patch",
+        url: `${process.env.REACT_APP_BACKEND_URL}/tasks/${id}`,
+        data: { starred: !starred }, // Toggle starred state
+      });
+
+      setTasks((prev) =>
+        prev.map((task) => (task._id === id ? updatedTask : task))
+      );
+    } catch (error) {
+      console.error("Error starring task:", error);
+    }
+  };
+
   // Handle keyboard events for Enter, ArrowUp, ArrowDown
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -168,7 +185,7 @@ const App = () => {
       {loading && <ClipLoader color="#28a745" size={30} />}
       {error && <p className="error-message">{error}</p>}
 
-      <div className="add-task">
+      <div className="add-task flex gap-10">
         <div className="input-container">
           <input
             type="text"
@@ -186,7 +203,7 @@ const App = () => {
             {newTask.length}/{MAX_TASK_LENGTH}
           </p>
         </div>
-        <div className="task-buttons">
+        <div className="task-buttons flex gap-5">
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
@@ -220,6 +237,7 @@ const App = () => {
         markAsComplete={markAsComplete}
         revertTask={revertTask}
         deleteTask={deleteTask}
+        toggleStarred={toggleStarred}
       />
     </div>
   );
